@@ -8,10 +8,10 @@ import {
     StyleSheet,TouchableOpacity , Image,ScrollView,TextInput
 } from 'react-native'
 
-class CustomerNew extends Component {
+class CustomerEdit extends Component {
 
       static navigationOptions = ({ navigation }) => ({
-        title: 'New Customer',
+        title: 'Edit Customer',
       })
 
 
@@ -41,25 +41,29 @@ class CustomerNew extends Component {
         }
     }
 
+
+
     constructor(props) {
         super(props);
         const { navigation } = this.props;
-        const name = this.props.navigation.state.params.customerName;
-        const nic  = navigation.getParam('customerNIC');
-        const email = navigation.getParam('customerEmail');
-        const bankAccount = navigation.getParam('customerBankAccount');
-        const mobile = this.props.navigation.state.params.customerMobile;
-        const customerType = navigation.getParam('customerType');
-        const customerID = navigation.getParam('customerID');
+        // const name = this.props.navigation.state.params.customerName;
+        // const name  = navigation.getParam('customerName');
+        // const nic  = navigation.getParam('customerNIC');
+        // const email = navigation.getParam('customerEmail');
+        // const bankAccount = navigation.getParam('customerBankAccount');
+        // // const mobile = this.props.navigation.state.params.customerMobile;
+        // const mobile = navigation.getParam('customerMobile');
+        // const customerType = navigation.getParam('customerType');
+        // const customerID = navigation.getParam('customerID');
         // alert(name + mobile );
         this.state = {
-            name: name,
-            nic: nic,
-            email: email,
-            bankAccount: bankAccount,
-            customerType: customerType,
-            mobile: mobile,
-            customerID: customerID,
+            name:  '',
+            nic: '',
+            email: '',
+            bankAccount: '',
+            customerType: '',
+            mobile: '',
+            customerID: '',
 
             progress: 0,
             indeterminate: true,
@@ -69,7 +73,42 @@ class CustomerNew extends Component {
 
     }
 
-  render () {
+    componentWillMount() {
+        const { navigation } = this.props;
+        // const name = this.props.navigation.state.params.customerName;
+        const nic  = navigation.getParam('customerName');
+        this.fetchData(nic);
+      }
+
+
+    async fetchData(nic) {
+        try{
+            const url_string = "http://notifyme.resortsunandmoon.com/Customers/read_one.php?nic=" +nic ;
+            const response = await fetch(url_string);
+            const json = await response.json();
+            //this.setState({ data: json.data });
+            if(json.data != "Invalid user"){
+
+                this.setState({ name: json.data.name });
+                this.setState({ nic: json.data.nic });
+                this.setState({ email: json.data.email });
+                this.setState({ tp_mobile: json.data.tp_mobile });
+                this.setState({ account_no: json.data.account_no });
+                this.setState({ user_type: json.data.user_type });
+
+                // this.props.navigation.navigate('ShowCalendarScreen', {dateData: json.data , url: this.state.base_url})
+            }else{
+                this.setState({progress_status : 0});
+                Alert.alert("Alerta","L'inici de sessió no s'ha completat. Comprova el nom d'usuari i la contrasenya");
+            }
+        } catch(error){
+            // this.setState({progress_status : 0});
+        }
+
+    };
+
+
+        render () {
     return (
       <View style={styles.container}>
           <TouchableOpacity
@@ -208,7 +247,7 @@ class CustomerNew extends Component {
   }
 }
 
-export default CustomerNew
+export default CustomerEdit
 
 const styles = StyleSheet.create({
     container: {

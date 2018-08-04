@@ -14,8 +14,9 @@ import ItemList from './ItemList'
 import Item from './Item'
 
 // TabNavigator screens
+import CustomersNew from './CustomersNew'
 import CustomersAll from './CustomersAll'
-import CustomerNew from './CustomerNew'
+import CustomerEdit from './CustomerEdit'
 import TabC from './TabC'
 
 // CalendarScreen old component
@@ -60,6 +61,15 @@ export const InvestmentScreen = StackNavigator({
     },
 })
 
+export const NewCustomerScreen = StackNavigator({
+    NewCustomer : { screen: CustomersNew,
+        navigationOptions: {
+            headerStyle: {display:"none"},
+            headerLeft: null
+        },
+    },
+})
+
 
 export const Stack = StackNavigator({
     Plain: { screen: CalendarScreen },
@@ -71,11 +81,11 @@ export const Stack = StackNavigator({
 
 export const Tabs = TabNavigator({
     CustomersAll: { screen: CustomersAll  },
-    CustomerNew: { screen: CustomerNew  },
+    CustomerEdit: { screen: CustomerEdit  },
   // TabC: { screen: TabC },
 }, {
     tabBarPosition : 'bottom',
-  order: ['CustomersAll', 'CustomerNew']
+  order: ['CustomersAll', 'CustomerEdit']
 })
 
 export const TabsLoans = TabNavigator({
@@ -94,10 +104,10 @@ export const Drawer = DrawerNavigator({
             headerStyle: {display:"none"},
             headerLeft: null
         }},
-
+    NewCustomer: { screen: NewCustomerScreen },
     Loan: { screen: TabsLoans },
     Investment: { screen: InvestmentScreen },
-    Stack: { screen: Stack },
+    // Stack: { screen: Stack },
     Search: { screen: SearchScreen },
 
 })

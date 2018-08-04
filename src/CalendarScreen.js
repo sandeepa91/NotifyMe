@@ -274,7 +274,7 @@ class CalendarScreen extends Component {
 
     openCustomerScreen( customerName,customerMobile ){
         alert(customerName + customerMobile);
-        //this.props.navigation.navigate('CustomerNew',{customerName,customerMobile})
+        //this.props.navigation.navigate('CustomerEdit',{customerName,customerMobile})
     }
 
     openDateRelatedScreen(day){

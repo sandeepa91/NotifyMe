@@ -10,8 +10,9 @@ class CustomersAll extends Component {
     constructor(props){
         super(props);
         this.state = {
-            data:[{"customerName": "Sandeepa Dilshan", "customerMobile":"0712127275"},
-                {"customerName":"Nilantha Sampath", "customerMobile":"0712424585"}],
+            // data:[{"customerName": "Sandeepa Dilshan", "customerMobile":"0712127275"},
+            //     {"customerName":"Nilantha Sampath", "customerMobile":"0712424585"}],
+            data : [],
         };
     }
 
@@ -26,10 +27,10 @@ class CustomersAll extends Component {
     // fetchData = async (contractorId,workId,date) => {
     fetchData = async () => {
         // const  url_string  = "http://185.58.193.10:555/api/home/GetWorkersForSiteAndCompanies?contractorid="+contractorId+"&workid=" +workId+"&d="+date ;
-        // const  url_string  = "http://185.58.193.10:555/api/home/GetWorkersForSiteAndCompanies?contractorid=2&workid=2&d=06/29/2018" ;
-        // const response = await fetch(url_string );
-        // const json = await response.json();
-        // this.setState({ data: json.data });
+        const  url_string  = "http://notifyme.resortsunandmoon.com/Customers/read.php" ;
+        const response = await fetch(url_string );
+        const json = await response.json();
+        this.setState({ data: json.records });
     };
 
   static navigationOptions = ({ navigation }) => ({
@@ -40,9 +41,9 @@ class CustomersAll extends Component {
   // this.props.navigation.navigate('viewUsersScreen', {workerId,dayworkplanId,date,contractorName,url:this.props.navigation.state.params.url,dateString:dateString})
   // }
 
-    openCustomerScreen( customerName,customerMobile ){
-       alert(customerName,customerMobile);
-       this.props.navigation.navigate('CustomerNew',{customerName: customerName,customerMobile:customerMobile})
+    openCustomerScreen( customerNIC ){
+       alert(customerNIC );
+       this.props.navigation.navigate('CustomerEdit',{customerNIC: customerNIC })
     }
 
 
@@ -63,18 +64,18 @@ class CustomersAll extends Component {
                   data={this.state.data}
                   renderItem={({item})=>
                       <TouchableOpacity
-                          onPress={(data) =>  this.openCustomerScreen(item.customerName,item.customerMobile )}>
+                          onPress={(data) =>  this.openCustomerScreen(item.nic )}>
                           <View style={styles.container_btn}>
 
                               <View style={{flex:0.55 }}  >
-                                  <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}>{item.customerName}</Text>
+                                  <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}>{item.name}</Text>
                               </View>
 
                               <View style={{flex:0.05 }}  >
 
                               </View>
                               <View style={{flex:0.35 }} >
-                                  <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}>{item.customerMobile}</Text>
+                                  <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}>{item.tp_mobile}</Text>
                               </View>
                               <View style={{flex:0.05 }} >
 
