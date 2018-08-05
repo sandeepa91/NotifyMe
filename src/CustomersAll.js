@@ -42,7 +42,6 @@ class CustomersAll extends Component {
   // }
 
     openCustomerScreen( customerNIC ){
-       alert(customerNIC );
        this.props.navigation.navigate('CustomerEdit',{customerNIC: customerNIC })
     }
 

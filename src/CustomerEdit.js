@@ -76,32 +76,34 @@ class CustomerEdit extends Component {
     componentWillMount() {
         const { navigation } = this.props;
         // const name = this.props.navigation.state.params.customerName;
-        const nic  = navigation.getParam('customerName');
+        const nic  = navigation.getParam('customerNIC');
         this.fetchData(nic);
       }
 
 
     async fetchData(nic) {
+          alert(nic)
         try{
             const url_string = "http://notifyme.resortsunandmoon.com/Customers/read_one.php?nic=" +nic ;
             const response = await fetch(url_string);
             const json = await response.json();
-            //this.setState({ data: json.data });
-            if(json.data != "Invalid user"){
 
-                this.setState({ name: json.data.name });
-                this.setState({ nic: json.data.nic });
-                this.setState({ email: json.data.email });
-                this.setState({ tp_mobile: json.data.tp_mobile });
-                this.setState({ account_no: json.data.account_no });
-                this.setState({ user_type: json.data.user_type });
+            //this.setState({ data: json.data });
+            if(json.data[0].nic != "null"){
+
+                this.setState({ name: json.data[0].name });
+                this.setState({ nic: json.data[0].nic });
+                this.setState({ email: json.data[0].email });
+                this.setState({ tp_mobile: json.data[0].tp_mobile });
+                this.setState({ account_no: json.data[0].account_no });
+                this.setState({ user_type: json.data[0].user_type });
 
                 // this.props.navigation.navigate('ShowCalendarScreen', {dateData: json.data , url: this.state.base_url})
             }else{
                 this.setState({progress_status : 0});
                 Alert.alert("Alerta","L'inici de sessió no s'ha completat. Comprova el nom d'usuari i la contrasenya");
             }
-        } catch(error){
+        }catch(error){
             // this.setState({progress_status : 0});
         }
 
