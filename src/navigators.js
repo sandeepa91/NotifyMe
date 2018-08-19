@@ -25,6 +25,7 @@ import CalendarScreen from './CalendarScreen'
 import Home from './Home'
 import Search from './Search'
 import Loans from './Loans'
+import LoansNew from './LoansNew'
 import LoansActive from './LoansActive'
 import LoansInactive from './LoansInactive'
 import Investment from './Investment'
@@ -36,6 +37,15 @@ export const Login = StackNavigator({
 
 export const SearchScreen = StackNavigator({
     Search : { screen: Search,
+        navigationOptions: {
+            headerStyle: {display:"none"},
+            headerLeft: null
+        },
+    },
+})
+
+export const LoansNewScreen = StackNavigator({
+    LoansNew : { screen: LoansNew,
         navigationOptions: {
             headerStyle: {display:"none"},
             headerLeft: null
@@ -106,8 +116,9 @@ export const Drawer = DrawerNavigator({
         }},
     NewCustomer: { screen: NewCustomerScreen },
     Loan: { screen: TabsLoans },
+    NewLoan : { screen: LoansNewScreen },
     Investment: { screen: InvestmentScreen },
     // Stack: { screen: Stack },
-    Search: { screen: SearchScreen },
+    Find : { screen: SearchScreen },
 
 })

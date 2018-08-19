@@ -16,7 +16,7 @@ class Investment extends Component {
                     onPress ={() => this.props.navigation.navigate('DrawerOpen')} >
                     <Image style = {styles.drawer} source={require('../img/drawer_icon.png')} />
                 </TouchableOpacity>
-                <Text style={styles.text}>I'm Investment</Text>
+                <Text style={styles.text}> Investment</Text>
             </View>
         )
     }

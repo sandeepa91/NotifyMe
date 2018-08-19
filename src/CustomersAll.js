@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,TouchableOpacity , Image,ScrollView,FlatList
 } from 'react-native'
+import Firebase from './Firebase' ;
 
 class CustomersAll extends Component {
 
@@ -21,7 +22,24 @@ class CustomersAll extends Component {
         // const contractorId =  this.props.navigation.state.params.contractorId;
         // const workId = this.props.navigation.state.params.workId;
         // this.fetchData(contractorId,workId,date);
-        this.fetchData();
+        // this.fetchData();
+
+        //this.fetchCustomerData( );
+        var that = this;
+        var finished = [];
+
+        Firebase.database().ref('customers/').once('value').then( (snapshot) =>{
+            console.log(snapshot.val());
+            snapshot.forEach((data) => {
+                let result = data.val();
+                result["key"] = data.key;
+                console.log(result);
+                finished.push( result);
+            })
+        }).then(function () {
+            that.setState({data: finished})
+            console.log(this.state.data)
+        })
     }
 
     // fetchData = async (contractorId,workId,date) => {
@@ -31,6 +49,25 @@ class CustomersAll extends Component {
         const response = await fetch(url_string );
         const json = await response.json();
         this.setState({ data: json.records });
+    };
+
+    fetchCustomerData = async () => {
+        // const  url_string  = "http://185.58.193.10:555/api/home/GetWorkersForSiteAndCompanies?contractorid="+contractorId+"&workid=" +workId+"&d="+date ;
+
+        // Firebase.database().ref('customers/').once('value').then(snapshot => {
+        //        console.log(snapshot.val())
+        //     this.setState({ data: snapshot.val() })
+        // })
+
+        // Firebase.database().ref('customers').once('value',(data) =>{
+        //     const json = data.name;
+        //     // this.setState({ data: data });
+        //     console.log(data);
+        // })
+
+
+
+
     };
 
   static navigationOptions = ({ navigation }) => ({
@@ -74,7 +111,7 @@ class CustomersAll extends Component {
 
                               </View>
                               <View style={{flex:0.35 }} >
-                                  <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}>{item.tp_mobile}</Text>
+                                  <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}>{item.mobile}</Text>
                               </View>
                               <View style={{flex:0.05 }} >
 
@@ -87,6 +124,8 @@ class CustomersAll extends Component {
 
                   }
                   keyExtractor={(item, index) => index.toString()}  />
+
+
           </View>
           </View>
 

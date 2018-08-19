@@ -7,6 +7,7 @@ import {
     Text,
     StyleSheet,TouchableOpacity , Image,ScrollView,TextInput
 } from 'react-native'
+import Firebase from './Firebase' ;
 
 class CustomersNew extends Component {
 
@@ -34,10 +35,29 @@ class CustomersNew extends Component {
 
     saveCustomer = (name,nic, email, tp_mobile, bankAccount, userType ) => {
         if(name != '' && nic != '' && tp_mobile != '' && userType != ''){
-            this.saveNewCustomer(name,nic,email,tp_mobile,bankAccount,userType)
+            // this.saveNewCustomer(name,nic,email,tp_mobile,bankAccount,userType)
+            this.saveNewCustomerFirebase(name,nic,email,tp_mobile,bankAccount,userType)
+
         }else{
             alert("Please fill the fields");
         }
+    }
+
+    saveNewCustomerFirebase = async (name,nic,email,tp_mobile,bankAccount,userType) => {
+        Firebase.database().ref('customers/'+nic).set(
+            {
+                name: name,
+                nic: nic,
+                email: email,
+                mobile: tp_mobile,
+                bankAccount: bankAccount,
+                userType: 1,
+            }
+        ).then(() => {
+            console.log('Inserted');
+        }).catch((error) =>{
+            console.log(error);
+        });
     }
 
     saveNewCustomer = async (name,nic,email,tp_mobile,bankAccount,userType) => {
@@ -254,7 +274,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     text: {
-        marginLeft: 60,
+        marginLeft: 80,
         color: 'black',
         fontSize: 20,
         fontWeight: 'bold',

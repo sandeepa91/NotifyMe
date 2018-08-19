@@ -82,7 +82,7 @@ class CustomerEdit extends Component {
 
 
     async fetchData(nic) {
-          alert(nic)
+
         try{
             const url_string = "http://notifyme.resortsunandmoon.com/Customers/read_one.php?nic=" +nic ;
             const response = await fetch(url_string);
@@ -121,7 +121,7 @@ class CustomerEdit extends Component {
 
           <View style={{flex: 0.9}}>
 
-              <Text style={styles.text}>New Customer</Text>
+              <Text style={styles.text}>Edit Customer</Text>
 
               <ScrollView style={styles.container}>
                   <View style={styles.container}>

@@ -35,6 +35,15 @@ class CalendarScreen extends Component {
         }
     };
 
+    /** START - Create new Loan*/
+    _createNewLoan({date}){
+        this.setState({ visibleModal: null });
+       // alert(date);
+        this.props.navigation.navigate('LoansNew', {date: date});
+    }
+    /** END - Create new Loan*/
+
+
     /** START - View note view model*/
     _renderNoteModalContent = (noteObj ) => (
         <View style={stylesModel.modalContent} >
@@ -69,31 +78,36 @@ class CalendarScreen extends Component {
 
 
     /** START - View note view model*/
-    _renderDateRelatedCustomers = (noteObj ) => (
+    _renderDateRelatedCustomers = (date ) => (
         <View style={stylesModel.modalContent} >
-            <Text> Note </Text>
-            <TextInput style = {stylesModel.inputModel}
-                       underlineColorAndroid = "transparent"
-                       placeholderTextColor = "#000000"
-                       autoCapitalize = "none"
-                       placeholder={noteObj}
-                // value={noteObj[1]}
+            <Text style={{marginBottom:20}}> Date : {date} </Text>
 
-                       returnKeyType="go"
-                //onChangeText={this.handleNotes}
-                       onChangeText={(note) => this.setState({note})}
-                       value={this.state.notes}
-                // onChangeText={(text) => this.setState({text})}
-                // onChangeText={(text) => this.setState({text})}
-            />
+            <FlatList
+                data={this.state.selectedDateCustomers}
+                renderItem={({item}) =>
+                    <View style={{flex: 1,
+                        flexDirection: 'row'}}  >
+                        <View style={{width: '35%'}}>
+                            <Text style={{ padding: 2,fontWeight: 'bold',fontSize: 14,}}>{item.customerName}</Text>
+                        </View>
+                        <View style={{width: '30%'}}>
+                            <Text style={{  padding: 2,fontWeight: 'bold',fontSize: 14,}}>Rs. {item.customerLoanAmount}</Text>
+                        </View>
+                        <View style={{width: '35%'}}>
+                            <Text style={{ padding: 2,fontWeight: 'bold',fontSize: 14,}}>{item.customerMobile}</Text>
+                        </View>
+                    </View>
+                }
+                keyExtractor={(item, index) => index.toString()}  />
+
             <View style={stylesModel.modelContainer_btn_bottom}>
                 <View style={stylesModel.modelButton}>
                     <RaisedTextButton  color="#ff1744" onPress={() => this.setState({ visibleModal: null })}
                                        rippleDuration={600} rippleOpacity={0.54} title='Cancel'  titleColor='#ffffff' />
                 </View>
                 <View style={stylesModel.modelButton} >
-                    <RaisedTextButton    color="#37474f"  onPress={() => this._saveWorkandDateRelatedNote() }
-                                         rippleDuration={600} rippleOpacity={0.54} title='Update Note'     titleColor='#ffffff' />
+                    <RaisedTextButton    color="#37474f"  onPress={() => this._createNewLoan({date}) }
+                                         rippleDuration={600} rippleOpacity={0.54} title='New Loan'     titleColor='#ffffff' />
                 </View>
             </View>
         </View>
@@ -107,7 +121,9 @@ class CalendarScreen extends Component {
         this.state = {
             IsUser: 1,
             marked: false,
+            selectedDate: '',
             dateRelatedCustomers:[],
+            selectedDateCustomers:[],
             visibleModal: null,
             note:[]
         };
@@ -131,7 +147,7 @@ class CalendarScreen extends Component {
 
 
 
-    componentDidMount() {
+    componentWillMount() {
         // this.props.navigation.setParams({ handleLogout: this.handleLogout })
         // const dateData = this.props.navigation.state.params.dateData;
         // var nextDay = dateData;
@@ -187,13 +203,16 @@ class CalendarScreen extends Component {
 
                 <View>
                     <Modal isVisible={this.state.visibleModal === 2}>
-                        {this._renderDateRelatedCustomers("date")}
+                        {/*{this._renderDateRelatedCustomers(this.state.selectedDate, this.state.selectedDateCustomers)}*/}
+                        {this._renderDateRelatedCustomers(this.state.selectedDate)}
                     </Modal>
                 </View>
+
                 <View style={{flex: 0.1}}>
                     <Text style={styles.text}>I'm a Login!</Text>
                     {this.state.IsUser != '1' ? this.renderLogin() : this.renderCalendar()}
                 </View>
+
                 <View style={{flex: 0.7}}>
                     <ScrollView style={styles.container}>
 
@@ -283,8 +302,15 @@ class CalendarScreen extends Component {
         var weekday = ['Diumenge','Dilluns','Mimarts','Dimecres','Dijous','Divendres','Dissabte'];
         var monthNames = ['Gener','Febrer','Març','Abril','Maig','Juny','Juliol','Agost','Setembre','Octubre','Novembre','Desembre'];
         var dateString = weekday[d.getDay()]+' '+day.day + ' ' + monthNames[day.month-1].toString() ;
-        this.setState({ visibleModal: 2}, {dateString} );
-        //alert('day: ' + day.dateString)
+        this.setState({selectedDate:day.dateString});
+        var selectedDateCustomers = [
+            {"customerID" : "01","customerName" : "Sandeepa Dilshan", "customerLoanAmount" : "25000", "customerMobile" : "0712127275"},
+            {"customerID" : "02","customerName" : "Yasindu Eranga  ", "customerLoanAmount" : "35000", "customerMobile" : "0713147275"},
+            {"customerID" : "03","customerName" : "Nilantha Sampath", "customerLoanAmount" : "50000","customerMobile" : "0712424585"}];
+        this.setState({selectedDateCustomers:selectedDateCustomers});
+
+        this.setState({ visibleModal: 2 });
+
         //this.props.navigation.navigate('ShowDateDataScreen', {day: day, dateString: dateString,url:this.state.base_url})
     }
 
