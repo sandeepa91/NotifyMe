@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { TextButton, RaisedTextButton } from 'react-native-material-buttons';
 // import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
+import {Constants, storeLoanID,getLoanID} from './Constants.js';
 
 import {
     View,
-    Text,
+    Text,Picker,
     StyleSheet,TouchableOpacity , Image,ScrollView,TextInput
 } from 'react-native'
 import Firebase from './Firebase' ;
@@ -33,33 +34,64 @@ class LoansNew extends Component {
         this.setState({ email: text })
     }
 
-    saveCustomer = (name,nic, email, tp_mobile, bankAccount, userType ) => {
-        if(name != '' && nic != '' && tp_mobile != '' && userType != ''){
+    saveLoan = (date,userID, loanAmount ) => {
+        if(date != '' && userID != '' && loanAmount != ''){
             // this.saveNewCustomer(name,nic,email,tp_mobile,bankAccount,userType)
-            this.saveNewCustomerFirebase(name,nic,email,tp_mobile,bankAccount,userType)
+            this.saveNewCustomerFirebase(date,userID,loanAmount)
 
         }else{
             alert("Please fill the fields");
         }
     }
 
-    saveNewCustomerFirebase = async (name,nic,email,tp_mobile,bankAccount,userType) => {
-        Firebase.database().ref('customers/'+nic).set(
+    saveNewCustomerFirebase = async (date,userID,loanAmount) => {
+        var dt = new Date(date);
+        function add_months(dt, n)
+        {
+            return new Date(dt.setMonth(dt.getMonth() + n));
+        }
+        //alert(add_months(dt, 1).toString());
+
+        var nextPayment = new Date(add_months(dt,1));
+
+        var yyyy = nextPayment.getFullYear();
+        var dd = nextPayment.getDate();
+        var mm = nextPayment.getMonth(); //January is 0!
+        if(mm<10){
+            mm='0'+mm;
+        }
+        var loanID = "Loan_"+dt+"_"+userID;
+
+        Firebase.database().ref('loans/'+loanID).set(
             {
-                name: name,
-                nic: nic,
-                email: email,
-                mobile: tp_mobile,
-                bankAccount: bankAccount,
-                userType: 1,
+                date: date,
+                userID: userID,
+                loanAmount: loanAmount,
+                payment_1: yyyy+"-"+mm+"-"+dd ,
+                nextPayment: yyyy+"-"+mm+"-"+dd ,
+
+
             }
         ).then(() => {
             console.log('Inserted');
         }).catch((error) =>{
             console.log(error);
         });
+
+
+
     }
 
+//     getEmail('username').then((email) => {
+//     emailExist = email;
+//     getPassword('password').then((password) => {
+//     passwordExist = password;
+//     // alert(passwordExist + emailExist);
+//     this.login(emailExist, passwordExist)
+//     }).catch()
+//     }).catch((error) => {
+//     // console.log(error)
+// });
 
 
     constructor(props) {
@@ -73,13 +105,41 @@ class LoansNew extends Component {
         // alert(name + mobile );
         this.state = {
             date: date,
-            userID: userID,
+            userID: '',
             loanAmount: loanAmount,
+            // userData:[ 'one', 'two', 'three', 'four', 'five' ],
+            userData:[],
         };
 
     }
 
+    componentWillMount(){
+        this.spinnerUserSelect();
+    }
+
+    spinnerUserSelect(){
+        var that = this;
+        var finished = [];
+
+        Firebase.database().ref('customers/').once('value').then( (snapshot) =>{
+            console.log(snapshot.val());
+            snapshot.forEach((data) => {
+                let result = data.val();
+                result["key"] = data.key;
+                console.log(result.name);
+                finished.push( result);
+            })
+        }).then(function () {
+            that.setState({userData: finished})
+            console.log(this.state.userData)
+        })
+    }
     render () {
+        // let serviceItems = this.state.userData.map( (name, nic) => {
+        //     console.log({nic})
+        //     return <Picker.Item key={nic} value={name} label={name} />
+        // });
+
         return (
             <View style={styles.container}>
                 <TouchableOpacity
@@ -116,7 +176,24 @@ class LoansNew extends Component {
 
                             <View style={styles.container_btn}>
                                 <View style={{flex: 0.3}}>
-                                    <Text>  Customer</Text>
+                                    <Text>Customer</Text>
+                                </View>
+                                <View style={{flex: 0.7}}>
+                                    <Picker
+                                        selectedValue={this.state.userID}
+                                        style={{ height: 50, width: 100 }}
+                                        onValueChange={(itemValue, itemIndex) => this.setState({userID: itemValue})}>
+                                        { this.state.userData.map(user => (
+                                            <Picker.Item label={user.name} value={user.nic} />
+                                        ))}
+                                    </Picker>
+                                </View>
+                            </View>
+
+
+                            <View style={styles.container_btn}>
+                                <View style={{flex: 0.3}}>
+                                    <Text>  Loan Amount</Text>
                                 </View>
                                 <View style={{flex: 0.7}}>
                                     <TextInput style = {styles.input}
@@ -124,11 +201,12 @@ class LoansNew extends Component {
                                                placeholderTextColor = "#000000"
                                                autoCapitalize = "none"
                                                returnKeyType="go"
-                                               onChangeText={(userID) => this.setState({userID: userID})}
-                                               value={this.state.userID}
-                                               ref={(input) => this.passwordInput = input} />
+                                               onChangeText={(loanAmount) => this.setState({loanAmount: loanAmount})}
+                                               value={this.state.loanAmount}  />
                                 </View>
                             </View>
+
+
 
 
 
@@ -148,7 +226,7 @@ class LoansNew extends Component {
                                                onPress={() => this.props.navigation.goBack(null)} titleColor='#ffffff' />
                         </View>
                         <View style={styles.button}>
-                            <RaisedTextButton    color="#37474f" onPress={() => this.saveLoan(this.state.date, this.state.userID)}
+                            <RaisedTextButton    color="#37474f" onPress={() => this.saveLoan(this.state.date, this.state.userID,this.state.loanAmount)}
                                                  rippleDuration={600} rippleOpacity={0.54} title='Save' titleColor='#ffffff' />
                         </View>
                     </View>

@@ -10,16 +10,17 @@ import {
 import Modal from "react-native-modal";
 import stylesModel from '../CSS/model.js';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
+import Firebase from './Firebase' ;
 
 //disable the warning masages on bottom of the UI
 // YellowBox.ignoreWarnings(['Warning: Failed']);
 
 //Calendars localized
 LocaleConfig.locales['Ca'] = {
-    monthNames: ['Gener','Febrer','Març','Abril','Maig','Juny','Juliol','Agost','Setembre','Octubre','Novembre','Desembre'],
-    monthNamesShort: ['Gene.','Febr.','Març','Abril','Mai','Juny','Juli.','Agos.','Sete.','Oct.','Nov.','Des.'],
-    dayNames: ['Diumenge','Dilluns','Mimarts','Dimecres','Dijous','Divendres','Dissabte'],
-    dayNamesShort: ['Diu.','Dil.','Mim.','Dime.','Dijo.','Diven.','Diss.']
+    monthNames: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+    monthNamesShort: ['Janu.','Febr.','Mar.','Apri.','May','Jun.','Jul.','Aug.','Sep.','Oct.','Nov.','Dec.'],
+    dayNames: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+    dayNamesShort: ['Su','Mo','TU.','We','Th','Fr','Sa']
 };
 
 LocaleConfig.defaultLocale = 'Ca';
@@ -121,6 +122,8 @@ class CalendarScreen extends Component {
         this.state = {
             IsUser: 1,
             marked: false,
+            currentdate:'',
+            nextDates:[],
             selectedDate: '',
             dateRelatedCustomers:[],
             selectedDateCustomers:[],
@@ -145,31 +148,85 @@ class CalendarScreen extends Component {
     }
 
 
+    getCurrentDateLoans(){
+        var loanData = [];
+        Firebase.database().ref('loans/').orderByChild('nextPayment')
+            .startAt(this.state.currentdate).endAt(this.state.currentdate)
+            .once('value').then( (snapshot) =>{
+                snapshot.forEach((data) => {
+                    let result = data.val().userID.replace("\"","");
 
+                    if(result != null){
+                        console.log("result_"+result);
+                        Firebase.database().ref('customers/').orderByChild('nic')
+                            .startAt(result).endAt(result)
+                            .once('value').then( (snapshotLoan) =>{
+                            snapshotLoan.forEach((dataLoan) => {
+                                let resultData = dataLoan.val();
+                                resultData["key"] = dataLoan.key;
+                                loanData.push( resultData);
+                                this.setState({dateRelatedCustomers: loanData})
+                            })
+                        })
+                    }
+                })
+            }).then(function () {
+                console.log("result"+result);
+            })
+    }
 
-    componentWillMount() {
-        // this.props.navigation.setParams({ handleLogout: this.handleLogout })
-        // const dateData = this.props.navigation.state.params.dateData;
-        // var nextDay = dateData;
+    getNextDates(){
+        var that = this;
+        var dates = [];
 
-        var nextDay =[
-            '2018-07-01',
-            '2018-07-05',
-            '2018-07-08',
-            '2018-07-07',
-            '2018-07-18',
-            '2018-07-17',
-            '2018-08-28',
-            '2018-08-29'];
-        this.markDates(nextDay);
+        Firebase.database().ref('loans/').once('value').then( (snapshot) =>{
 
-        var dateRelatedCustomers = [
-            {"customerID" : "01","customerName" : "Sandeepa Dilshan", "customerLoanAmount" : "25000", "customerMobile" : "0712127275",},
-            {"customerID" : "02","customerName" : "Yasindu Eranga  ", "customerLoanAmount" : "35000", "customerMobile" : "0713147275"},
-            {"customerID" : "03","customerName" : "Nilantha Sampath", "customerLoanAmount" : "50000","customerMobile" : "0712424585"}];
-        this.state.dateRelatedCustomers = dateRelatedCustomers;
+            snapshot.forEach((data) => {
+                let result = data.val();
+                result["key"] = data.key;
+                console.log(result.nextPayment);
+                dates.push( result.nextPayment.replace("\"",""));
+                that.setState({nextDates: dates})
+                this.markDates(this.state.nextDates);
+            })
+        }).then(function () {
+            that.setState({nextDates: dates})
+        })
+
+    }
+
+    componentDidMount() {
+        var currentdate = new Date();
+        var dd = currentdate.getDate();
+        var mm = currentdate.getMonth()+1;
+        var yyyy = currentdate.getFullYear();
+        if(dd<10) {
+            dd = '0'+dd
+        }if(mm<10) {
+            mm = '0'+mm
+        }
+        currentdate = yyyy+ '-' + mm  + '-' + dd;
+        this.state.currentdate = currentdate;
+        this.getCurrentDateLoans();
+        this.getNextDates();
+
+        // this.state.nextDates =[
+        //     '2018-07-01',
+        //     '2018-07-05',
+        //     '2018-07-08',
+        //     '2018-08-07',
+        //     '2018-08-18',
+        //     '2018-08-17',
+        //     '2018-08-28',
+        //     '2018-08-29'];
+        // var dateRelatedCustomers = [
+        //     {"nic" : "01","name" : "Sandeepa Dilshan", "customerLoanAmount" : "25000", "mobile" : "0712127275",},
+        //     {"nic" : "02","name" : "Yasindu Eranga", "customerLoanAmount" : "35000", "mobile" : "0713147275"},
+        //     {"nic" : "03","name" : "Nilantha Sampath", "customerLoanAmount" : "50000","mobile" : "0712424585"}];
+        // this.state.dateRelatedCustomers = dateRelatedCustomers;
+        
         this.state.note = [{"note" : "Test note "}]
-        this.markDates(nextDay);
+        // this.markDates(this.state.nextDates);
     }
 
     // call markDates function after get value in nextDay array
@@ -180,16 +237,7 @@ class CalendarScreen extends Component {
 
   render () {
 
-      var currentdate = new Date();
-      var dd = currentdate.getDate();
-      var mm = currentdate.getMonth()+1;
-      var yyyy = currentdate.getFullYear();
-      if(dd<10) {
-          dd = '0'+dd
-      }if(mm<10) {
-          mm = '0'+mm
-      }
-      currentdate = yyyy+ '/' + mm  + '/' + dd;
+
 
     return (
 
@@ -218,9 +266,9 @@ class CalendarScreen extends Component {
 
                         <Calendar
                             style={styles.calendar}
-                            current={currentdate}
+                            current={this.state.currentdate}
                             minDate={'2018-03-10'}
-                            maxDate={'2018-08-29'}
+                            maxDate={'2028-08-29'}
                             firstDay={1}
                             markingType={'custom'}
                             markedDates={ this.state.marked}
@@ -235,7 +283,7 @@ class CalendarScreen extends Component {
                     <View style={styles.container_tbl}>
                         <ScrollView style={styles.container}>
 
-                            <Text style={{marginLeft: 40}}>{currentdate}</Text>
+                            <Text style={{marginLeft: 40}}>{this.state.currentdate}</Text>
 
                         <FlatList
                             data={this.state.dateRelatedCustomers}
@@ -246,13 +294,13 @@ class CalendarScreen extends Component {
                                     <View style={styles.container_btn}>
 
                                         <View style={{flex:0.4 }}  >
-                                            <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}>{item.customerName}</Text>
+                                            <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}>{item.name}</Text>
                                         </View>
                                         <View style={{flex:0.25 }} >
-                                            <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}>Rs. {item.customerLoanAmount}</Text>
+                                            <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}>Rs. {item.nic}</Text>
                                         </View>
                                         <View style={{flex:0.35 }} >
-                                            <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}> {item.customerMobile} </Text>
+                                            <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}> {item.mobile} </Text>
                                         </View>
 
                                     </View>
@@ -345,7 +393,8 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         paddingTop: 5,
         borderBottomWidth: 1,
-        borderColor: '#eee',
+        borderColor: '#e9eec3',
+        backgroundColor:'#e9eec3',
         height: 350
     },
   text: {

@@ -4,6 +4,7 @@ import {
     Text,TouchableOpacity,ScrollView, Picker,FlatList,
     StyleSheet,
 } from 'react-native'
+import Firebase from "./Firebase";
 
 class Loans extends Component {
 
@@ -16,21 +17,24 @@ class Loans extends Component {
     }
 
     componentWillMount(){
-        // const date =  this.props.navigation.state.params.date;
-        // const contractorId =  this.props.navigation.state.params.contractorId;
-        // const workId = this.props.navigation.state.params.workId;
-        // this.fetchData(contractorId,workId,date);
-        this.fetchData();
+        var that = this;
+        var finished = [];
+
+        Firebase.database().ref('Loan/').once('value').then( (snapshot) =>{
+            console.log(snapshot.val());
+            snapshot.forEach((data) => {
+                let result = data.val();
+                result["key"] = data.key;
+                console.log(result);
+                finished.push( result);
+            })
+        }).then(function () {
+            that.setState({data: finished})
+            console.log(this.state.data)
+        })
     }
 
-    // fetchData = async (contractorId,workId,date) => {
-    fetchData = async () => {
-        // const  url_string  = "http://185.58.193.10:555/api/home/GetWorkersForSiteAndCompanies?contractorid="+contractorId+"&workid=" +workId+"&d="+date ;
-        // const  url_string  = "http://185.58.193.10:555/api/home/GetWorkersForSiteAndCompanies?contractorid=2&workid=2&d=06/29/2018" ;
-        // const response = await fetch(url_string );
-        // const json = await response.json();
-        // this.setState({ data: json.data });
-    };
+
 
     render () {
         return (
