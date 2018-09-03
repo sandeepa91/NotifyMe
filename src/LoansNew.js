@@ -152,7 +152,7 @@ class LoansNew extends Component {
                     <Text style={styles.text}>New Loans</Text>
 
 
-                        <View style={{flex: 0.3}}>
+                        <View style={{flex: 0.2}}>
                             <View style={styles.container_btn}>
                                 <View style={{flex: 0.3}}>
                                     <Text >  Date </Text>
@@ -170,6 +170,26 @@ class LoansNew extends Component {
                                 </View>
                             </View>
                             </View>
+
+                <View style={{flex: 0.2}}>
+
+                    <View style={styles.container_btn}>
+                        <View style={{flex: 0.3}}>
+                            <Text>  Loan Amount</Text>
+                        </View>
+                        <View style={{flex: 0.7}}>
+                            <TextInput style = {styles.input}
+                                       underlineColorAndroid = "transparent"
+                                       placeholderTextColor = "#000000"
+                                       autoCapitalize = "none"
+                                       returnKeyType="go"
+                                       onChangeText={(loanAmount) => this.setState({loanAmount: loanAmount})}
+                                       value={this.state.loanAmount}  />
+                        </View>
+                    </View>
+
+                </View>
+
                             <View style={{flex: 0.3}}>
                             <View style={styles.container_btn}>
                                 <View style={{flex: 0.3}}>
@@ -188,29 +208,7 @@ class LoansNew extends Component {
                             </View>
                             </View>
 
-                        <View style={{flex: 0.3}}>
 
-                            <View style={styles.container_btn}>
-                                <View style={{flex: 0.3}}>
-                                    <Text>  Loan Amount</Text>
-                                </View>
-                                <View style={{flex: 0.7}}>
-                                    <TextInput style = {styles.input}
-                                               underlineColorAndroid = "transparent"
-                                               placeholderTextColor = "#000000"
-                                               autoCapitalize = "none"
-                                               returnKeyType="go"
-                                               onChangeText={(loanAmount) => this.setState({loanAmount: loanAmount})}
-                                               value={this.state.loanAmount}  />
-                                </View>
-                            </View>
-
-
-
-
-
-
-                        </View>
 
 
                 {/*<View style={{margin:10}} >*/}
