@@ -53,9 +53,23 @@ class Loans extends Component {
                     onPress ={() => this.props.navigation.navigate('DrawerOpen')} >
                     <Image style = {styles.drawer} source={require('../img/drawer_icon.png')} />
                 </TouchableOpacity>
+
+                <View style={{flex: 0.1}}>
+                    <View style={styles.container_btn}>
+                        <View style={{flex: 0.2}}>
+                        </View>
+                        <View style={{flex: 0.6}}>
+                            <Text style={styles.text}> Loans - All </Text>
+                        </View>
+                        <View style={{flex: 0.2}}>
+                        </View>
+                    </View>
+                </View>
+
+
                 <View style={{flex: 0.9}}>
 
-                    <Text style={styles.text}> Loans - All </Text>
+
 
                     <View style={styles.container_tbl}>
                         <ScrollView style={styles.container}>
@@ -98,7 +112,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#ffffff',
-        paddingTop: 10,
+        padding: 10,
     },
     text: {
         marginLeft: 60,
@@ -107,6 +121,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     button: {
+        paddingTop:10,
         position: 'absolute',
         top:  0,
         left: 0,

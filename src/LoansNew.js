@@ -200,7 +200,7 @@ class LoansNew extends Component {
 
                             </View>
 
-                            <View style={{flex: 0.2}}>
+                            <View style={{flex: 0.1}}>
                             <View style={styles.container_btn}>
                                 <View style={{flex: 0.3}}>
                                     <Text>  Customer</Text>

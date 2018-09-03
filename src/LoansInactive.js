@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#ffffff',
-        paddingTop: 10,
+        padding:10,
     },
     text: {
         marginLeft: 60,
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     button: {
+        paddingTop:10,
         position: 'absolute',
         top:  0,
         left: 0,
