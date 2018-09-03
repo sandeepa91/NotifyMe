@@ -466,14 +466,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   button: {
-    position: 'absolute',
       paddingTop:10,
-    top:  0,
-    left: 0,
-    width:  50,
-    height: 45,
-    alignItems: 'center',
-    justifyContent: 'center'
+      margin:2,
+      marginTop:5,
+      backgroundColor: '#ffffff',
+      width: '49%',
+      height: 42
   },
   buttonText: {
     color: 'white'

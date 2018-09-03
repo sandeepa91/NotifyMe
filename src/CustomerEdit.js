@@ -119,9 +119,22 @@ class CustomerEdit extends Component {
               <Image style = {styles.drawer} source={require('../img/drawer_icon.png')} />
           </TouchableOpacity>
 
+
+          <View style={{flex: 0.1}}>
+              <View style={styles.container_btn}>
+                  <View style={{flex: 0.2}}>
+                  </View>
+                  <View style={{flex: 0.6}}>
+                      <Text style={styles.text}>Edit Customer</Text>
+                  </View>
+                  <View style={{flex: 0.2}}>
+                  </View>
+              </View>
+          </View>
+
+
           <View style={{flex: 0.9}}>
 
-              <Text style={styles.text}>Edit Customer</Text>
 
               <ScrollView style={styles.container}>
                   <View style={styles.container}>
@@ -254,6 +267,7 @@ export default CustomerEdit
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        padding:10,
         backgroundColor: '#ffffff',
     },
     container_btn: {
@@ -276,6 +290,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     button: {
+        paddingTop:10,
         margin:2,
         marginTop:5,
         backgroundColor: '#ffffff',

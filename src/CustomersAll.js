@@ -91,9 +91,21 @@ class CustomersAll extends Component {
               onPress ={() => this.props.navigation.navigate('DrawerOpen')} >
               <Image style = {styles.drawer} source={require('../img/drawer_icon.png')} />
           </TouchableOpacity>
+
+          <View style={{flex: 0.1}}>
+              <View style={styles.container_btn}>
+                  <View style={{flex: 0.2}}>
+                  </View>
+                  <View style={{flex: 0.6}}>
+                      <Text style={styles.text}>All Customer</Text>
+                  </View>
+                  <View style={{flex: 0.2}}>
+                  </View>
+              </View>
+          </View>
           <View style={{flex: 0.9}}>
 
-              <Text style={styles.text}>All Customer</Text>
+
 
           <View style={styles.container_tbl}>
               <FlatList
@@ -157,13 +169,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     button: {
-        position: 'absolute',
-        top:  0,
-        left: 0,
-        width:  40,
-        height: 35,
-        alignItems: 'center',
-        justifyContent: 'center'
+        paddingTop:10,
+        margin:2,
+        marginTop:5,
+        backgroundColor: '#ffffff',
+        width: '49%',
+        height: 42
     },
     buttonText: {
         color: 'white'
