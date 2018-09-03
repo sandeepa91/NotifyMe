@@ -51,6 +51,7 @@ class CalendarScreen extends Component {
             date: this.state.currentdate,
             note: this.state.note
         });
+        this.setState({ visibleModal: null });
     }
     /** END - Create new Note*/
 
