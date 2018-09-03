@@ -147,9 +147,19 @@ class LoansNew extends Component {
                     <Image style = {styles.drawer} source={require('../img/drawer_icon.png')} />
                 </TouchableOpacity>
 
+                    <View style={{flex: 0.1}}>
+                    <View style={styles.container_btn}>
+                    <View style={{flex: 0.2}}>
+                    </View>
+                        <View style={{flex: 0.6}}>
+                            <Text style={styles.text}>New Loans</Text>
+                        </View>
+                            <View style={{flex: 0.2}}>
+                            </View>
+                            </View>
+                    </View>
 
 
-                    <Text style={styles.text}>New Loans</Text>
 
 
                         <View style={{flex: 0.1}}>
@@ -193,7 +203,7 @@ class LoansNew extends Component {
                             <View style={{flex: 0.2}}>
                             <View style={styles.container_btn}>
                                 <View style={{flex: 0.3}}>
-                                    <Text>Customer</Text>
+                                    <Text>  Customer</Text>
                                 </View>
                                 <View style={{flex: 0.7}}>
                                     <Picker
@@ -207,7 +217,7 @@ class LoansNew extends Component {
                                 </View>
                             </View>
                             </View>
-                <View style={{flex: 0.5}}>
+                <View style={{flex: 0.4}}>
                 </View>
 
 
