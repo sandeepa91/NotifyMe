@@ -494,7 +494,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#37474f',
         alignItems: 'stretch',
         borderRadius: 25,
-        height: 60,
+
 
     },
 })
