@@ -308,10 +308,10 @@ class CalendarScreen extends Component {
                     </Modal>
                 </View>
 
-                {this.state.IsUser != '1' ? this.renderLogin() : this.renderCalendar()}
+
                 <View style={{flex: 0.1  }}>
 
-
+                    {this.state.IsUser != '1' ? this.renderLogin() : this.renderCalendar()}
                     <View style={styles.container_btn}>
                         <View style={{flex: 0.3}}>
                         </View>
