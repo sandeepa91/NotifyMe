@@ -308,13 +308,21 @@ class CalendarScreen extends Component {
                     </Modal>
                 </View>
 
+
                 <View style={{flex: 0.1}}>
-                    <Text style={styles.text}>I'm a Login!</Text>
                     {this.state.IsUser != '1' ? this.renderLogin() : this.renderCalendar()}
 
+                    <View style={styles.container_btn}>
+                        <View style={{flex: 0.3}}>
+                        </View>
+                        <View style={{flex: 0.4}}>
+                            <Text style={styles.text}>Notify Me</Text>
+                        </View>
+                        <View style={{flex: 0.3}}>
+                        </View>
+                    </View>
                 </View>
-
-                <View style={{flex: 0.7}}>
+                <View style={{flex: 0.5}}>
                     <ScrollView style={styles.container}>
 
                         <Calendar
@@ -453,8 +461,8 @@ const styles = StyleSheet.create({
         height: 350
     },
   text: {
-    color: 'white',
-    fontSize: 40,
+    color: 'black',
+    fontSize: 20,
     fontWeight: 'bold',
   },
   button: {
