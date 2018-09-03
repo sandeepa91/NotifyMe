@@ -69,8 +69,7 @@ class LoansNew extends Component {
                 loanAmount: loanAmount,
                 payment_1: yyyy+"-"+mm+"-"+dd ,
                 nextPayment: yyyy+"-"+mm+"-"+dd ,
-
-
+                active:1,
             }
         ).then(() => {
             console.log('Inserted');

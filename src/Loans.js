@@ -5,38 +5,47 @@ import {
     StyleSheet,
 } from 'react-native'
 import Firebase from "./Firebase";
+import Images from "../img/images.js";
 
 class Loans extends Component {
 
     constructor(props){
         super(props);
         this.state = {
-            data:[{"loanStartedDate": "2018/08/11","customerName": "Sandeepa Dilshan", "loanAmount":"500000","customerMobile":"0712127275","loanStatus":"0"},
-                {"loanStartedDate": "2018/07/01", "customerName":"Nilantha Sampath","loanAmount":"250000", "customerMobile":"0712424585","loanStatus":"1"}],
+            data:[],
         };
     }
 
     componentWillMount(){
+
         var that = this;
         var finished = [];
 
-        Firebase.database().ref('Loan/').once('value').then( (snapshot) =>{
-            console.log(snapshot.val());
+        Firebase.database().ref('loans/').once('value').then((snapshot) =>{
+
             snapshot.forEach((data) => {
                 let result = data.val();
-                result["key"] = data.key;
-                console.log(result);
-                finished.push( result);
+                let userID = data.val().userID
+                let userName = ''
+                Firebase.database().ref('customers/').child(userID)
+                    .once('value').then( (snapshotLoan) =>{
+                    userName  = snapshotLoan.val().name ;
+                    result["userName"] = userName;
+                    finished.push( result);
+                    that.setState({data: finished})
+                })
             })
-        }).then(function () {
-            that.setState({data: finished})
-            console.log(this.state.data)
+        }).then(function() {
         })
+
     }
 
 
 
     render () {
+        const active =    <Image  style={{width: 20, height: 20,marginLeft:5}} source={Images.planned} /> ;
+        const notActive =      <Image style={{width: 20, height: 20, marginLeft:5}}  source={Images.notPlanned} /> ;
+
         return (
             <View style={styles.container}>
                 <TouchableOpacity
@@ -46,7 +55,7 @@ class Loans extends Component {
                 </TouchableOpacity>
                 <View style={{flex: 0.9}}>
 
-                    <Text style={styles.text}>All Loans</Text>
+                    <Text style={styles.text}> Loans - All </Text>
 
                     <View style={styles.container_tbl}>
                         <ScrollView style={styles.container}>
@@ -57,24 +66,21 @@ class Loans extends Component {
                                     onPress={(data) =>  this.openCustomerScreen(item.customerName,item.customerMobile )}>
                                     <View style={styles.container_btn}>
 
-                                        <View style={{flex:0.3 }}  >
-                                            <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}>{item.loanStartedDate}</Text>
+                                        <View style={{flex:0.3 }} >
+                                            <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}>{item.date}</Text>
                                         </View>
                                         <View style={{flex:0.3 }} >
-                                            <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}>{item.customerName}</Text>
+                                            <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}>{item.userName}</Text>
                                         </View>
                                         <View style={{flex:0.25 }} >
                                             <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}>{item.loanAmount}</Text>
                                         </View>
                                         <View style={{flex:0.15 }} >
-                                            <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}>{item.loanStatus}</Text>
+                                            {item.active == 1 ? active : notActive }
                                         </View>
-
                                     </View>
                                     <View style={{ borderBottomColor: 'black', borderBottomWidth: 1 }}/>
                                 </TouchableOpacity>
-
-
                             }
                             keyExtractor={(item, index) => index.toString()}  />
                         </ScrollView>

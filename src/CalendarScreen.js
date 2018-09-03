@@ -89,13 +89,13 @@ class CalendarScreen extends Component {
                     <View style={{flex: 1,
                         flexDirection: 'row'}}  >
                         <View style={{width: '35%'}}>
-                            <Text style={{ padding: 2,fontWeight: 'bold',fontSize: 14,}}>{item.customerName}</Text>
+                            <Text style={{ padding: 2,fontWeight: 'bold',fontSize: 14,}}>{item.name}</Text>
                         </View>
                         <View style={{width: '30%'}}>
-                            <Text style={{  padding: 2,fontWeight: 'bold',fontSize: 14,}}>Rs. {item.customerLoanAmount}</Text>
+                            <Text style={{  padding: 2,fontWeight: 'bold',fontSize: 14,}}> {item.loanAmount}</Text>
                         </View>
                         <View style={{width: '35%'}}>
-                            <Text style={{ padding: 2,fontWeight: 'bold',fontSize: 14,}}>{item.customerMobile}</Text>
+                            <Text style={{ padding: 2,fontWeight: 'bold',fontSize: 14,}}>{item.mobile}</Text>
                         </View>
                     </View>
                 }
@@ -139,14 +139,47 @@ class CalendarScreen extends Component {
 
     renderCalendar = () => {
         return (
+
                 <TouchableOpacity
                     style = {styles.button}
                     onPress ={() => this.props.navigation.navigate('DrawerOpen')} >
                     <Image style = {styles.drawer} source={require('../img/drawer_icon.png')} />
                 </TouchableOpacity>
+
+
+
+
         )
     }
 
+    getSelectedDateLoans(selectedDate){
+        var selectedDateLoanData = [];
+        Firebase.database().ref('loans/').orderByChild('nextPayment')
+            .startAt(selectedDate).endAt(selectedDate)
+            .once('value').then( (snapshot) =>{
+            snapshot.forEach((data) => {
+                let result = data.val().userID.replace("\"","");
+                let loanAmount = data.val().loanAmount.replace("\"","");
+
+                if(result != null){
+                    console.log("result_"+result);
+                    Firebase.database().ref('customers/').orderByChild('nic')
+                        .startAt(result).endAt(result)
+                        .once('value').then( (snapshotLoan) =>{
+                        snapshotLoan.forEach((dataLoan) => {
+                            let resultData = dataLoan.val();
+                            resultData["loanAmount"] = loanAmount;
+                            resultData["key"] = dataLoan.key;
+                            selectedDateLoanData.push( resultData);
+                            this.setState({selectedDateCustomers:selectedDateLoanData})
+                        })
+                    })
+                }
+            })
+        }).then(function () {
+            console.log("result"+result);
+        })
+    }
 
     getCurrentDateLoans(){
         var loanData = [];
@@ -155,7 +188,7 @@ class CalendarScreen extends Component {
             .once('value').then( (snapshot) =>{
                 snapshot.forEach((data) => {
                     let result = data.val().userID.replace("\"","");
-
+                    let loanAmount = data.val().loanAmount.replace("\"","");
                     if(result != null){
                         console.log("result_"+result);
                         Firebase.database().ref('customers/').orderByChild('nic')
@@ -163,6 +196,7 @@ class CalendarScreen extends Component {
                             .once('value').then( (snapshotLoan) =>{
                             snapshotLoan.forEach((dataLoan) => {
                                 let resultData = dataLoan.val();
+                                resultData["loanAmount"] = loanAmount;
                                 resultData["key"] = dataLoan.key;
                                 loanData.push( resultData);
                                 this.setState({dateRelatedCustomers: loanData})
@@ -259,6 +293,7 @@ class CalendarScreen extends Component {
                 <View style={{flex: 0.1}}>
                     <Text style={styles.text}>I'm a Login!</Text>
                     {this.state.IsUser != '1' ? this.renderLogin() : this.renderCalendar()}
+
                 </View>
 
                 <View style={{flex: 0.7}}>
@@ -288,8 +323,7 @@ class CalendarScreen extends Component {
                         <FlatList
                             data={this.state.dateRelatedCustomers}
                             renderItem={({item})=>
-                                <TouchableOpacity
-                                    onPress={(data) =>  this.openCustomerScreen(item.customerName,item.customerMobile )}>
+                                <TouchableOpacity  onPress={(data) =>  this.openCustomerScreen(item.customerName,item.customerMobile )}>
 
                                     <View style={styles.container_btn}>
 
@@ -297,7 +331,7 @@ class CalendarScreen extends Component {
                                             <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}>{item.name}</Text>
                                         </View>
                                         <View style={{flex:0.25 }} >
-                                            <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}>Rs. {item.nic}</Text>
+                                            <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}> {item.loanAmount}</Text>
                                         </View>
                                         <View style={{flex:0.35 }} >
                                             <Text style={{flex: 1, padding: 2,marginLeft: 10,fontWeight: 'bold',fontSize: 14,}}> {item.mobile} </Text>
@@ -345,17 +379,19 @@ class CalendarScreen extends Component {
     }
 
     openDateRelatedScreen(day){
-
+        this.setState({selectedDateCustomers:null});
         var d = new Date(day.dateString);
         var weekday = ['Diumenge','Dilluns','Mimarts','Dimecres','Dijous','Divendres','Dissabte'];
         var monthNames = ['Gener','Febrer','Març','Abril','Maig','Juny','Juliol','Agost','Setembre','Octubre','Novembre','Desembre'];
         var dateString = weekday[d.getDay()]+' '+day.day + ' ' + monthNames[day.month-1].toString() ;
         this.setState({selectedDate:day.dateString});
-        var selectedDateCustomers = [
-            {"customerID" : "01","customerName" : "Sandeepa Dilshan", "customerLoanAmount" : "25000", "customerMobile" : "0712127275"},
-            {"customerID" : "02","customerName" : "Yasindu Eranga  ", "customerLoanAmount" : "35000", "customerMobile" : "0713147275"},
-            {"customerID" : "03","customerName" : "Nilantha Sampath", "customerLoanAmount" : "50000","customerMobile" : "0712424585"}];
-        this.setState({selectedDateCustomers:selectedDateCustomers});
+
+        this.getSelectedDateLoans(day.dateString);
+        var selectedDateCustomers = [];
+            // {"customerID" : "01","customerName" : "Sandeepa Dilshan", "customerLoanAmount" : "25000", "customerMobile" : "0712127275"},
+            // {"customerID" : "02","customerName" : "Yasindu Eranga  ", "customerLoanAmount" : "35000", "customerMobile" : "0713147275"},
+            // {"customerID" : "03","customerName" : "Nilantha Sampath", "customerLoanAmount" : "50000","customerMobile" : "0712424585"}];
+        //this.setState({selectedDateCustomers:selectedDateCustomers});
 
         this.setState({ visibleModal: 2 });
 
