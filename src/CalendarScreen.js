@@ -443,6 +443,7 @@ const styles = StyleSheet.create({
   },
   button: {
     position: 'absolute',
+      paddingTop:10,
     top:  0,
     left: 0,
     width:  40,

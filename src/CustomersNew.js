@@ -258,6 +258,7 @@ export default CustomersNew
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        padding:10,
         backgroundColor: '#ffffff',
     },
     container_btn: {
@@ -280,6 +281,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     button: {
+        paddingTop:10,
         margin:2,
         marginTop:5,
         backgroundColor: '#ffffff',

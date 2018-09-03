@@ -147,15 +147,12 @@ class LoansNew extends Component {
                     <Image style = {styles.drawer} source={require('../img/drawer_icon.png')} />
                 </TouchableOpacity>
 
-                <View style={{flex: 0.9}}>
+
 
                     <Text style={styles.text}>New Loans</Text>
 
                     <ScrollView style={styles.container}>
-                        <View style={styles.container}>
-                            <View style={{height:4}}>
-
-                            </View>
+                        <View style={{flex: 0.3}}>
                             <View style={styles.container_btn}>
                                 <View style={{flex: 0.3}}>
                                     <Text >  Date </Text>
@@ -172,7 +169,8 @@ class LoansNew extends Component {
                                                ref={(input) => this.passwordInput = input} />
                                 </View>
                             </View>
-
+                            </View>
+                            <View style={{flex: 0.3}}>
                             <View style={styles.container_btn}>
                                 <View style={{flex: 0.3}}>
                                     <Text>Customer</Text>
@@ -188,7 +186,9 @@ class LoansNew extends Component {
                                     </Picker>
                                 </View>
                             </View>
+                            </View>
 
+                        <View style={{flex: 0.3}}>
 
                             <View style={styles.container_btn}>
                                 <View style={{flex: 0.3}}>
@@ -209,10 +209,10 @@ class LoansNew extends Component {
 
 
 
-                        </View>
 
+                        </View>
                     </ScrollView>
-                </View>
+
 
                 {/*<View style={{margin:10}} >*/}
                 {/*{this.state.progress_status == '1' ? progressBar : null}*/}
@@ -240,6 +240,7 @@ export default LoansNew
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        padding:10,
         backgroundColor: '#ffffff',
     },
     container_btn: {
@@ -256,12 +257,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     text: {
-        marginLeft: 80,
+        marginLeft: 120,
         color: 'black',
         fontSize: 20,
         fontWeight: 'bold',
     },
     button: {
+        paddingTop:10,
         margin:2,
         marginTop:5,
         backgroundColor: '#ffffff',
