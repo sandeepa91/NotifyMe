@@ -152,7 +152,7 @@ class LoansNew extends Component {
                     <Text style={styles.text}>New Loans</Text>
 
 
-                        <View style={{flex: 0.2}}>
+                        <View style={{flex: 0.1}}>
                             <View style={styles.container_btn}>
                                 <View style={{flex: 0.3}}>
                                     <Text >  Date </Text>
@@ -171,24 +171,24 @@ class LoansNew extends Component {
                             </View>
                             </View>
 
-                <View style={{flex: 0.2}}>
+                            <View style={{flex: 0.1}}>
 
-                    <View style={styles.container_btn}>
-                        <View style={{flex: 0.3}}>
-                            <Text>  Loan Amount</Text>
-                        </View>
-                        <View style={{flex: 0.7}}>
-                            <TextInput style = {styles.input}
-                                       underlineColorAndroid = "transparent"
-                                       placeholderTextColor = "#000000"
-                                       autoCapitalize = "none"
-                                       returnKeyType="go"
-                                       onChangeText={(loanAmount) => this.setState({loanAmount: loanAmount})}
-                                       value={this.state.loanAmount}  />
-                        </View>
-                    </View>
+                                <View style={styles.container_btn}>
+                                    <View style={{flex: 0.3}}>
+                                        <Text>  Loan Amount</Text>
+                                    </View>
+                                    <View style={{flex: 0.7}}>
+                                        <TextInput style = {styles.input}
+                                                   underlineColorAndroid = "transparent"
+                                                   placeholderTextColor = "#000000"
+                                                   autoCapitalize = "none"
+                                                   returnKeyType="go"
+                                                   onChangeText={(loanAmount) => this.setState({loanAmount: loanAmount})}
+                                                   value={this.state.loanAmount}  />
+                                    </View>
+                                </View>
 
-                </View>
+                            </View>
 
                             <View style={{flex: 0.3}}>
                             <View style={styles.container_btn}>
@@ -198,7 +198,7 @@ class LoansNew extends Component {
                                 <View style={{flex: 0.7}}>
                                     <Picker
                                         selectedValue={this.state.userID}
-                                        style={{ height: 50, width: 100 }}
+                                        style={{ height: 50, width: 200 }}
                                         onValueChange={(itemValue, itemIndex) => this.setState({userID: itemValue})}>
                                         { this.state.userData.map(user => (
                                             <Picker.Item label={user.name} value={user.nic} />
