@@ -493,8 +493,8 @@ const styles = StyleSheet.create({
         borderColor: '#e53935',
         backgroundColor: '#37474f',
         alignItems: 'stretch',
-        borderRadius: 30,
-        height: 40,
+        borderRadius: 25,
+        height: 60,
 
     },
 })
