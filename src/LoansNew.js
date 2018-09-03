@@ -210,7 +210,7 @@ class LoansNew extends Component {
                                        placeholderTextColor = "#000000"
                                        autoCapitalize = "none"
                                        returnKeyType="go"
-                                       onChangeText={(loanAmount) => this.setState({note: note})}
+                                       onChangeText={(note) => this.setState({note: note})}
                                        value={this.state.note}  />
                         </View>
                     </View>
