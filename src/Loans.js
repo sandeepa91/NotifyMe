@@ -67,7 +67,7 @@ class Loans extends Component {
                 </View>
 
 
-                <View style={{flex: 0.9}}>
+                <View style={{flex: 0.8}}>
 
 
 
