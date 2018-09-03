@@ -151,7 +151,7 @@ class LoansNew extends Component {
 
                     <Text style={styles.text}>New Loans</Text>
 
-                    <ScrollView style={styles.container}>
+
                         <View style={{flex: 0.3}}>
                             <View style={styles.container_btn}>
                                 <View style={{flex: 0.3}}>
@@ -211,7 +211,6 @@ class LoansNew extends Component {
 
 
                         </View>
-                    </ScrollView>
 
 
                 {/*<View style={{margin:10}} >*/}
