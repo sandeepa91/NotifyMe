@@ -117,8 +117,8 @@ export const Drawer = DrawerNavigator({
     NewCustomer: { screen: NewCustomerScreen },
     Loan: { screen: TabsLoans },
     NewLoan : { screen: LoansNewScreen },
-    Investment: { screen: InvestmentScreen },
+    // Investment: { screen: InvestmentScreen },
     // Stack: { screen: Stack },
-    Find : { screen: SearchScreen },
+    // Find : { screen: SearchScreen },
 
 })

@@ -140,8 +140,7 @@ class CalendarScreen extends Component {
     renderCalendar = () => {
         return (
 
-                <TouchableOpacity
-                    style = {styles.button}
+                <TouchableOpacity style = {styles.button}
                     onPress ={() => this.props.navigation.navigate('DrawerOpen')} >
                     <Image style = {styles.drawer} source={require('../img/drawer_icon.png')} />
                 </TouchableOpacity>
@@ -234,11 +233,14 @@ class CalendarScreen extends Component {
         var dd = currentdate.getDate();
         var mm = currentdate.getMonth()+1;
         var yyyy = currentdate.getFullYear();
-        if(dd<10) {
+
+        if(dd<10){
             dd = '0'+dd
-        }if(mm<10) {
+        }
+        if(mm<10) {
             mm = '0'+mm
         }
+
         currentdate = yyyy+ '-' + mm  + '-' + dd;
         this.state.currentdate = currentdate;
         this.getCurrentDateLoans();
@@ -422,6 +424,7 @@ export default CalendarScreen
 
 const styles = StyleSheet.create({
     container: {
+        padding:10,
         flex: 1,
         backgroundColor: '#ffffff'
     },
