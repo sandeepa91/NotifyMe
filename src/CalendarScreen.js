@@ -220,7 +220,7 @@ class CalendarScreen extends Component {
     }
 
     getCurrentDateNotes(){
-        var loanData = [];
+
         Firebase.database().ref('notes/').orderByChild('date')
             .startAt(this.state.currentdate).endAt(this.state.currentdate)
             .once('value').then( (snapshot) =>{

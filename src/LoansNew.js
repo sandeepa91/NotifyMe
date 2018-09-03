@@ -50,8 +50,6 @@ class LoansNew extends Component {
         {
             return new Date(dt.setMonth(dt.getMonth() + n));
         }
-        //alert(add_months(dt, 1).toString());
-
         var nextPayment = new Date(add_months(dt,1));
 
         var yyyy = nextPayment.getFullYear();
@@ -78,19 +76,18 @@ class LoansNew extends Component {
         });
 
 
+        Firebase.database().ref('notes/' +date).set({
+            date: date,
+            note: this.state.note
+        });
+
+
+
+
 
     }
 
-//     getEmail('username').then((email) => {
-//     emailExist = email;
-//     getPassword('password').then((password) => {
-//     passwordExist = password;
-//     // alert(passwordExist + emailExist);
-//     this.login(emailExist, passwordExist)
-//     }).catch()
-//     }).catch((error) => {
-//     // console.log(error)
-// });
+
 
 
     constructor(props) {
@@ -100,12 +97,14 @@ class LoansNew extends Component {
         const date  = navigation.getParam('date');
         const userID  = navigation.getParam('userID');
         const loanAmount  = navigation.getParam('loanAmount');
+        const note  = navigation.getParam('note');
 
         // alert(name + mobile );
         this.state = {
             date: date,
             userID: '',
             loanAmount: loanAmount,
+            note: note,
             // userData:[ 'one', 'two', 'three', 'four', 'five' ],
             userData:[],
         };
@@ -200,32 +199,49 @@ class LoansNew extends Component {
 
                             </View>
 
-                            <View style={{flex: 0.1}}>
-                            <View style={styles.container_btn}>
-                                <View style={{flex: 0.3}}>
-                                    <Text>  Customer</Text>
-                                </View>
-                                <View style={{flex: 0.7}}>
-                                    <Picker
-                                        selectedValue={this.state.userID}
-                                        style={{ height: 40, width: 300 }}
-                                        onValueChange={(itemValue, itemIndex) => this.setState({userID: itemValue})}>
-                                        { this.state.userData.map(user => (
-                                            <Picker.Item label={user.name} value={user.nic} />
-                                        ))}
-                                    </Picker>
-                                </View>
-                            </View>
-                            </View>
-                <View style={{flex: 0.4}}>
+                <View style={{flex: 0.1}}>
+                    <View style={styles.container_btn}>
+                        <View style={{flex: 0.3}}>
+                            <Text>  Notes</Text>
+                        </View>
+                        <View style={{flex: 0.7}}>
+                            <TextInput style = {styles.input}
+                                       underlineColorAndroid = "transparent"
+                                       placeholderTextColor = "#000000"
+                                       autoCapitalize = "none"
+                                       returnKeyType="go"
+                                       onChangeText={(loanAmount) => this.setState({note: note})}
+                                       value={this.state.note}  />
+                        </View>
+                    </View>
+                </View>
+
+                <View style={{flex: 0.1}}>
+                    <View style={styles.container_btn}>
+                        <View style={{flex: 0.3}}>
+                            <Text>  Customer</Text>
+                        </View>
+                        <View style={{flex: 0.7}}>
+                            <Picker
+                                selectedValue={this.state.userID}
+                                style={{ height: 40, width: 300 }}
+                                onValueChange={(itemValue, itemIndex) => this.setState({userID: itemValue})}>
+                                { this.state.userData.map(user => (
+                                    <Picker.Item label={user.name} value={user.nic} />
+                                ))}
+                            </Picker>
+                        </View>
+                    </View>
                 </View>
 
 
 
 
-                {/*<View style={{margin:10}} >*/}
-                {/*{this.state.progress_status == '1' ? progressBar : null}*/}
-                {/*</View>*/}
+                <View style={{flex: 0.3}}>
+                </View>
+
+
+
 
                 <View style={{flex: 0.1, marginBottom: 20}}>
                     <View style={styles.container_btn}>
