@@ -190,7 +190,7 @@ class LoansNew extends Component {
 
                             </View>
 
-                            <View style={{flex: 0.3}}>
+                            <View style={{flex: 0.2}}>
                             <View style={styles.container_btn}>
                                 <View style={{flex: 0.3}}>
                                     <Text>Customer</Text>
@@ -198,7 +198,7 @@ class LoansNew extends Component {
                                 <View style={{flex: 0.7}}>
                                     <Picker
                                         selectedValue={this.state.userID}
-                                        style={{ height: 50, width: 200 }}
+                                        style={{ height: 40, width: 300 }}
                                         onValueChange={(itemValue, itemIndex) => this.setState({userID: itemValue})}>
                                         { this.state.userData.map(user => (
                                             <Picker.Item label={user.name} value={user.nic} />
@@ -207,6 +207,8 @@ class LoansNew extends Component {
                                 </View>
                             </View>
                             </View>
+                <View style={{flex: 0.5}}>
+                </View>
 
 
 
@@ -254,7 +256,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     text: {
-        marginLeft: 120,
+        marginLeft: 150,
         color: 'black',
         fontSize: 20,
         fontWeight: 'bold',
