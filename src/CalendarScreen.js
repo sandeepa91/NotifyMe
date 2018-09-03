@@ -45,6 +45,16 @@ class CalendarScreen extends Component {
     /** END - Create new Loan*/
 
 
+    /** START - Create new Note*/
+    _saveDateRelatedNote(){
+        Firebase.database().ref('notes/' + this.state.currentdate).set({
+            date: this.state.currentdate,
+            note: this.state.note
+        });
+    }
+    /** END - Create new Note*/
+
+
     /** START - View note view model*/
     _renderNoteModalContent = (noteObj ) => (
         <View style={stylesModel.modalContent} >
@@ -53,13 +63,13 @@ class CalendarScreen extends Component {
                        underlineColorAndroid = "transparent"
                        placeholderTextColor = "#000000"
                        autoCapitalize = "none"
-                       placeholder={noteObj['note']}
+                       placeholder={noteObj[1]}
                 // value={noteObj[1]}
 
                        returnKeyType="go"
                 //onChangeText={this.handleNotes}
                        onChangeText={(note) => this.setState({note})}
-                       value={this.state.notes}
+                       value={this.state.note}
                 // onChangeText={(text) => this.setState({text})}
                 // onChangeText={(text) => this.setState({text})}
             />
@@ -69,7 +79,7 @@ class CalendarScreen extends Component {
                                        rippleDuration={600} rippleOpacity={0.54} title='Cancel'  titleColor='#ffffff' />
                 </View>
                 <View style={stylesModel.modelButton} >
-                    <RaisedTextButton    color="#37474f"  onPress={() => this._saveWorkandDateRelatedNote() }
+                    <RaisedTextButton    color="#37474f"  onPress={() => this._saveDateRelatedNote() }
                                          rippleDuration={600} rippleOpacity={0.54} title='Update Note'     titleColor='#ffffff' />
                 </View>
             </View>
@@ -185,27 +195,43 @@ class CalendarScreen extends Component {
         Firebase.database().ref('loans/').orderByChild('nextPayment')
             .startAt(this.state.currentdate).endAt(this.state.currentdate)
             .once('value').then( (snapshot) =>{
-                snapshot.forEach((data) => {
-                    let result = data.val().userID.replace("\"","");
-                    let loanAmount = data.val().loanAmount.replace("\"","");
-                    if(result != null){
-                        console.log("result_"+result);
-                        Firebase.database().ref('customers/').orderByChild('nic')
-                            .startAt(result).endAt(result)
-                            .once('value').then( (snapshotLoan) =>{
-                            snapshotLoan.forEach((dataLoan) => {
-                                let resultData = dataLoan.val();
-                                resultData["loanAmount"] = loanAmount;
-                                resultData["key"] = dataLoan.key;
-                                loanData.push( resultData);
-                                this.setState({dateRelatedCustomers: loanData})
-                            })
+            snapshot.forEach((data) => {
+                let result = data.val().userID.replace("\"","");
+                let loanAmount = data.val().loanAmount.replace("\"","");
+                if(result != null){
+                    console.log("result_"+result);
+                    Firebase.database().ref('customers/').orderByChild('nic')
+                        .startAt(result).endAt(result)
+                        .once('value').then( (snapshotLoan) =>{
+                        snapshotLoan.forEach((dataLoan) => {
+                            let resultData = dataLoan.val();
+                            resultData["loanAmount"] = loanAmount;
+                            resultData["key"] = dataLoan.key;
+                            loanData.push( resultData);
+                            this.setState({dateRelatedCustomers: loanData})
                         })
-                    }
-                })
-            }).then(function () {
-                console.log("result"+result);
+                    })
+                }
             })
+        }).then(function () {
+            console.log("result"+result);
+        })
+    }
+
+    getCurrentDateNotes(){
+        var loanData = [];
+        Firebase.database().ref('notes/').orderByChild('date')
+            .startAt(this.state.currentdate).endAt(this.state.currentdate)
+            .once('value').then( (snapshot) =>{
+            snapshot.forEach((data) => {
+                let result = data.val().note.replace("\"","");
+                console.log(result);
+                this.setState({note: result})
+
+            })
+        }).then(function () {
+            console.log("result"+result);
+        })
     }
 
     getNextDates(){
@@ -243,26 +269,15 @@ class CalendarScreen extends Component {
 
         currentdate = yyyy+ '-' + mm  + '-' + dd;
         this.state.currentdate = currentdate;
+        // this.state.currentdate = "2018-09-05";
         this.getCurrentDateLoans();
+        this.getCurrentDateNotes();
         this.getNextDates();
 
-        // this.state.nextDates =[
-        //     '2018-07-01',
-        //     '2018-07-05',
-        //     '2018-07-08',
-        //     '2018-08-07',
-        //     '2018-08-18',
-        //     '2018-08-17',
-        //     '2018-08-28',
-        //     '2018-08-29'];
-        // var dateRelatedCustomers = [
-        //     {"nic" : "01","name" : "Sandeepa Dilshan", "customerLoanAmount" : "25000", "mobile" : "0712127275",},
-        //     {"nic" : "02","name" : "Yasindu Eranga", "customerLoanAmount" : "35000", "mobile" : "0713147275"},
-        //     {"nic" : "03","name" : "Nilantha Sampath", "customerLoanAmount" : "50000","mobile" : "0712424585"}];
-        // this.state.dateRelatedCustomers = dateRelatedCustomers;
+
         
         this.state.note = [{"note" : "Test note "}]
-        // this.markDates(this.state.nextDates);
+
     }
 
     // call markDates function after get value in nextDay array
@@ -477,6 +492,8 @@ const styles = StyleSheet.create({
         borderColor: '#e53935',
         backgroundColor: '#37474f',
         alignItems: 'stretch',
-        borderRadius: 30
+        borderRadius: 30,
+        height: 40,
+
     },
 })

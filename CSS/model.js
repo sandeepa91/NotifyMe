@@ -76,7 +76,7 @@ container: {
         borderWidth: 1
     },
     modelContainer_btn_bottom: {
-        marginTop: 5,
+        marginTop: 30,
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between'
