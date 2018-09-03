@@ -121,13 +121,11 @@ const styles = StyleSheet.create({
     },
     button: {
         paddingTop:10,
-        position: 'absolute',
-        top:  0,
-        left: 0,
-        width:  40,
-        height: 35,
-        alignItems: 'center',
-        justifyContent: 'center'
+        margin:2,
+        marginTop:5,
+        backgroundColor: '#ffffff',
+        width: '49%',
+        height: 42
     },
     buttonText: {
         color: 'white'
